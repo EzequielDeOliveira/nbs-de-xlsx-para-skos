@@ -1,7 +1,5 @@
 ambiente:
   build: .
-  command: python3 script.py
+  command: python3 script.py > arq.txt
   volumes:
     - .:/code
-  ports:
-    - "8000:8000"
