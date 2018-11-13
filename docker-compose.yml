@@ -1,0 +1,7 @@
+ambiente:
+  build: .
+  command: python3 script.py
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
