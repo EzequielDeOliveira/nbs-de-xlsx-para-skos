@@ -3,8 +3,11 @@ from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from parentNodeByNbsCode import parentCodeByNbs
 from slugify import slugify
 
-file = 'NBS-e-NEBS-em-excel.xlsx'
+def nodeByDescription(nbsDescription):
+    return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#' + slugify(nbsDescription))
 
+
+file = 'NBS-e-NEBS-em-excel.xlsx'
 
 xl = pd.ExcelFile(file)
 
@@ -15,13 +18,17 @@ nebs = xl.parse('NEBS')
 
 graph = Graph()
 skos = Namespace('http://www.w3.org/2004/02/skos/core#')
+dct = Namespace('http://purl.org/dc/elements/1.1')
+
 graph.bind('skos', skos)
+graph.bind('dct', dct)
 i = 0
 
-def nodeByDescription(nbsDescription):
-    return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#' + slugify(nbsDescription))
+esquema = URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#esquema')
     
 nbsCodeDescDict = {'1':'NBS 2.0'}
+
+
 
 for a in range(len(nebs)):
     i += 1
@@ -39,11 +46,20 @@ for a in range(len(nebs)):
     graph.add((uri, RDF['type'], skos['Concept']))
     graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='pt-br')))
     
-    graph.add((uri, skos['broader'], uriParent))
-    
+    graph.add((uri, skos['inScheme'], esquema))
 
-# print(graph.serialize(format='pretty-xml'))
+    if parentCode != '1':
+        graph.add((uri, skos['broader'], uriParent))
+    else:
+        graph.add((uri, skos['topConceptOf'], esquema))
+        graph.add((esquema, skos['hasTopConcept'], uri))
 
-file = open('NBS2-skos.nt','w') 
 
-file.write(str(graph.serialize(format='nt')))
+graph.add((esquema, RDF['type'], skos['ConceptScheme']))
+graph.add((esquema, dct['title'], Literal('Nomeclatura Brasileira de Serviços', lang='pt-br')))
+
+
+
+# print(gnbsh.serialize(format='pretty-xml'))
+
+graph.serialize(destination='NBS2-skos.nt', format='nt')
