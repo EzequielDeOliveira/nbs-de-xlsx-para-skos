@@ -1,3 +1,4 @@
 pandas
 xlrd
 rdflib
+python-slugify
