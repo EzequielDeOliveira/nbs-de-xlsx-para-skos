@@ -6,7 +6,7 @@ def parentCodeByNbs(code):
             return '1'
         elif len(strTmp) <= 6:
             if len(strTmp) <= 5:
-                strTmp = strTmp[:-2]
+                strTmp = strTmp[:-(len(strTmp) - 3)]
             else:
                 strTmp = strTmp[:-1]
             strTmp = strTmp[0] + '.' + strTmp[1:5]
