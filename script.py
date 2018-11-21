@@ -4,7 +4,7 @@ from parentNodeByNbsCode import parentCodeByNbs
 from slugify import slugify
 
 def nodeByDescription(nbsDescription):
-    return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#' + slugify(nbsDescription))
+    return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/' + slugify(nbsDescription))
 
 
 file = 'NBS-e-NEBS-em-excel.xlsx'
@@ -24,11 +24,15 @@ graph.bind('skos', skos)
 graph.bind('dct', dct)
 i = 0
 
-esquema = URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#esquema')
+# esquema = URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#esquema')
     
-nbsCodeDescDict = {'1':'NBS 2.0'}
+nbsCodeDescDict = {'1':'Nomenclatura Brasileira de Serviços'}
 
 
+uri = nodeByDescription('Nomenclatura Brasileira de Serviços')
+graph.add((uri, RDF['type'], skos['Concept']))
+graph.add((uri, skos['prefLabel'], Literal('Nomenclatura Brasileira de Serviços', lang='en')))
+# graph.add((uri, skos['inScheme'], esquema))
 
 for a in range(len(nebs)):
     i += 1
@@ -44,19 +48,19 @@ for a in range(len(nebs)):
         filesempai.write("Pai não encontrado! Pai: " + parentCode + ' Filho: ' + nebs.NBS2.get(a) + '\n')
 
     graph.add((uri, RDF['type'], skos['Concept']))
-    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='pt-br')))
+    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
     
-    graph.add((uri, skos['inScheme'], esquema))
+    # graph.add((uri, skos['inScheme'], esquema))
 
-    if parentCode != '1':
-        graph.add((uri, skos['broader'], uriParent))
-    else:
-        graph.add((uri, skos['topConceptOf'], esquema))
-        graph.add((esquema, skos['hasTopConcept'], uri))
+    # if parentCode != '1':
+    graph.add((uri, skos['broader'], uriParent))
+    # else:
+    #     graph.add((uri, skos['topConceptOf'], esquema))
+    #     graph.add((esquema, skos['hasTopConcept'], uri))
 
 
-graph.add((esquema, RDF['type'], skos['ConceptScheme']))
-graph.add((esquema, dct['title'], Literal('Nomeclatura Brasileira de Serviços', lang='pt-br')))
+# graph.add((esquema, RDF['type'], skos['ConceptScheme']))
+# graph.add((esquema, dct['title'], Literal('Nomeclatura Brasileira de Serviços', lang='en')))
 
 
 
