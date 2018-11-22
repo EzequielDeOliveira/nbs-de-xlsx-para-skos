@@ -1,5 +1,5 @@
 ambiente:
   build: .
-  command: python3 script.py
+  command: python3 script.py && chmod 777 NBS2-skos.xml && chmod 777 NBS2-skos.nt
   volumes:
     - .:/code

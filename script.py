@@ -47,16 +47,16 @@ for a in range(len(nebs)):
     except:
         filesempai.write("Pai não encontrado! Pai: " + parentCode + ' Filho: ' + nebs.NBS2.get(a) + '\n')
 
-    graph.add((uri, RDF['type'], skos['Concept']))
-    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
-    
-    # graph.add((uri, skos['inScheme'], esquema))
-
     # if parentCode != '1':
     graph.add((uri, skos['broader'], uriParent))
     # else:
     #     graph.add((uri, skos['topConceptOf'], esquema))
     #     graph.add((esquema, skos['hasTopConcept'], uri))
+
+    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
+    graph.add((uri, RDF['type'], skos['Concept']))
+    
+    # graph.add((uri, skos['inScheme'], esquema))
 
 
 # graph.add((esquema, RDF['type'], skos['ConceptScheme']))
@@ -65,5 +65,12 @@ for a in range(len(nebs)):
 
 
 # print(gnbsh.serialize(format='pretty-xml'))
+graph.serialize(destination='NBS2-skos.xml', format='pretty-xml')
 
-graph.serialize(destination='NBS2-skos.nt', format='nt')
+nbs = Graph()
+
+nbs.open('NBS2-skos.xml', create = True)
+
+nbs.serialize(destination='NBS2-skos.nt', format='nt')
+
+
