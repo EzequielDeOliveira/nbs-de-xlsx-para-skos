@@ -1,5 +1,17 @@
-ambiente:
-  build: .
-  command: python3 script.py && chmod 777 NBS2-skos.xml && chmod 777 NBS2-skos.nt
-  volumes:
-    - .:/code
+version: "3"
+services:
+  skoser:
+    build: .
+    command: python3 script.py
+    volumes:
+      - .:/code
+
+  raptor:
+    container_name: raptor
+    image: pheyvaer/raptor
+    depends_on: 
+      - skoser
+    restart: on-failure
+    volumes:
+      - .:/code
+    entrypoint: ["/bin/bash", "/code/rapper.sh"]

@@ -67,10 +67,4 @@ for a in range(len(nebs)):
 # print(gnbsh.serialize(format='pretty-xml'))
 graph.serialize(destination='NBS2-skos.xml', format='pretty-xml')
 
-nbs = Graph()
-
-nbs.open('NBS2-skos.xml', create = True)
-
-nbs.serialize(destination='NBS2-skos.nt', format='nt')
-
 
