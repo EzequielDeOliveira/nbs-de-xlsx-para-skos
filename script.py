@@ -53,8 +53,12 @@ for a in range(len(nebs)):
     #     graph.add((uri, skos['topConceptOf'], esquema))
     #     graph.add((esquema, skos['hasTopConcept'], uri))
 
-    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
     graph.add((uri, RDF['type'], skos['Concept']))
+    graph.add((uri, skos['prefLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
+    
+    if isinstance(nebs.NEBS.get(a), str):
+        graph.add((uri, skos['scopeNote'], Literal(nebs.NEBS.get(a), lang='en')))
+    
     
     # graph.add((uri, skos['inScheme'], esquema))
 
