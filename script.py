@@ -24,14 +24,14 @@ graph.bind('skos', skos)
 graph.bind('dct', dct)
 i = 0
 
-# esquema = URIRef('http://vocab.mdic.gov.br/NBS/v2.0/#esquema')
+esquema = URIRef('http://vocab.mdic.gov.br/NBS/v2.0/scheme')
     
 nbsCodeDescDict = {'1':'Nomenclatura Brasileira de Serviços'}
 
 
-uri = nodeByDescription('Nomenclatura Brasileira de Serviços')
-graph.add((uri, RDF['type'], skos['Concept']))
-graph.add((uri, skos['prefLabel'], Literal('Nomenclatura Brasileira de Serviços', lang='en')))
+# uri = nodeByDescription('Nomenclatura Brasileira de Serviços')
+# graph.add((uri, RDF['type'], skos['Concept']))
+# graph.add((uri, skos['prefLabel'], Literal('Nomenclatura Brasileira de Serviços', lang='en')))
 # graph.add((uri, skos['inScheme'], esquema))
 
 for a in range(len(nebs)):
@@ -47,11 +47,11 @@ for a in range(len(nebs)):
     except:
         filesempai.write("Pai não encontrado! Pai: " + parentCode + ' Filho: ' + nebs.NBS2.get(a) + '\n')
 
-    # if parentCode != '1':
-    graph.add((uri, skos['broader'], uriParent))
-    # else:
-    #     graph.add((uri, skos['topConceptOf'], esquema))
-    #     graph.add((esquema, skos['hasTopConcept'], uri))
+    if parentCode != '1':
+        graph.add((uri, skos['broader'], uriParent))
+    else:
+        graph.add((uri, skos['topConceptOf'], esquema))
+        graph.add((esquema, skos['hasTopConcept'], uri))
 
     graph.add((uri, RDF['type'], skos['Concept']))
 
