@@ -58,7 +58,7 @@ for a in range(len(nebs)):
     prefLabel = nebs.NBS2.get(a) + ' - ' + nebs.DESCRIÇÃO.get(a) 
 
     graph.add((uri, skos['prefLabel'], Literal(prefLabel, lang='en')))
-    graph.add((uri, skos['altLabel'], Literal(nebs.DESCRIÇÃO.get(a), lang='en')))
+    graph.add((uri, skos['altLabel'], Literal(nebs.NBS2.get(a), lang='en')))
     
     if isinstance(nebs.NEBS.get(a), str):
         graph.add((uri, skos['scopeNote'], Literal(nebs.NEBS.get(a), lang='en')))
