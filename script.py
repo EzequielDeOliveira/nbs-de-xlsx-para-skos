@@ -3,10 +3,19 @@ from rdflib import Graph, Literal, Namespace, RDF, URIRef
 from parentNodeByNbsCode import parentCodeByNbs
 from slugify import slugify
 
-def nodeByDescription(nbsDescription):
-    return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/' + slugify(nbsDescription))
+sections = [
+    'I',
+    'II',
+    'III',
+    'IV',
+    'V',
+]
 
-
+def nodeByDescription(nbsDescription, nbsCode):
+    if nbsCode in sections:
+        return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/' + slugify("secao " + nbsDescription))
+    else:
+        return URIRef('http://vocab.mdic.gov.br/NBS/v2.0/' + slugify(nbsDescription))
 file = 'NBS-e-NEBS-em-excel.xlsx'
 
 xl = pd.ExcelFile(file)
@@ -39,11 +48,11 @@ for a in range(len(nebs)):
 
     nbsCodeDescDict[nebs.NBS2.get(a)] = nebs.DESCRIÇÃO.get(a)
 
-    uri = nodeByDescription(nebs.DESCRIÇÃO.get(a))
+    uri = nodeByDescription(nebs.DESCRIÇÃO.get(a), nebs.NBS2.get(a))
     parentCode = parentCodeByNbs(nebs.NBS2.get(a))
 
     try:
-        uriParent = nodeByDescription(nbsCodeDescDict[parentCode])
+        uriParent = nodeByDescription(nbsCodeDescDict[parentCode], parentCode)
     except:
         filesempai.write("Pai não encontrado! Pai: " + parentCode + ' Filho: ' + nebs.NBS2.get(a) + '\n')
 
@@ -55,7 +64,10 @@ for a in range(len(nebs)):
 
     graph.add((uri, RDF['type'], skos['Concept']))
 
-    prefLabel = nebs.NBS2.get(a) + ' - ' + nebs.DESCRIÇÃO.get(a) 
+    if nebs.NBS2.get(a) in sections:
+       prefLabel = 'SEÇÃO ' + nebs.NBS2.get(a) + ' - ' + nebs.DESCRIÇÃO.get(a) 
+    else:
+        prefLabel = nebs.NBS2.get(a) + ' - ' + nebs.DESCRIÇÃO.get(a) 
 
     graph.add((uri, skos['prefLabel'], Literal(prefLabel, lang='pt')))
     graph.add((uri, skos['altLabel'], Literal(nebs.NBS2.get(a), lang='pt')))

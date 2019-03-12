@@ -1,9 +1,31 @@
+sections = [
+    'I',
+    'II',
+    'III',
+    'IV',
+    'V',
+]
+
 def parentCodeByNbs(code):
-        strTmp = code.replace('.','')
-        strTmp = strTmp.rstrip('0')
+    if code in sections:
+        return '1' 
+    else:
+        strTmpSemPonto = code.replace('.','')
+        strTmp = strTmpSemPonto.rstrip('0')
         
         if len(strTmp) <= 3:
-            return '1'
+            if int(strTmpSemPonto) < 102:
+                return 'I'
+            elif int(strTmpSemPonto) < 109:
+                return 'II'
+            elif int(strTmpSemPonto) < 112:
+                return 'III'
+            elif int(strTmpSemPonto) < 122:
+                return 'IV'
+            else:
+                return 'V'
+                
+            
         elif len(strTmp) <= 6:
             if len(strTmp) <= 5:
                 strTmp = strTmp[:-(len(strTmp) - 3)]
